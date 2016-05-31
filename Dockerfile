@@ -1,14 +1,21 @@
-# 使用官方 PHP-Apache 镜像
-FROM daocloud.io/php:5.6-apache
+FROM ubuntu:14.04
 
-# docker-php-ext-install 为官方 PHP 镜像内置命令，用于安装 PHP 扩展依赖
-# pdo_mysql 为 PHP 连接 MySQL 扩展
-RUN docker-php-ext-install pdo_mysql
+MAINTAINER YCZ <chenzhong@iscas.ac.cn>
 
-# /var/www/html/ 为 Apache 目录
-COPY . /var/www/html/
+# install apache2 php5 curl
+RUN apt-get update && apt-get install -y curl vim apache2 php5 mysql-client php5-mysql php5-curl
 
-RUN chown www-data:www-data -R /var/www/html/
-RUN chmod 777 -R /var/www/html/
+# apache2 configuration file
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
 
-RUN docker-php-ext-install pdo_mysql php5-mysql
+COPY . /var/www/html
+
+RUN chown www-data:www-data -R /var/www/html
+RUN chmod 777 -R /var/www/html
+
+EXPOSE 80
+
+CMD ["/usr/sbin/apache2ctl", " -D", "FOREGROUND"]

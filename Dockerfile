@@ -7,3 +7,6 @@ RUN docker-php-ext-install pdo_mysql
 
 # /var/www/html/ 为 Apache 目录
 COPY . /var/www/html/
+
+RUN chown www-data:www-data -R /var/www/html/
+RUN chmod 777 -R /var/www/html/

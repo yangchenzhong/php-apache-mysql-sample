@@ -10,3 +10,5 @@ COPY . /var/www/html/
 
 RUN chown www-data:www-data -R /var/www/html/
 RUN chmod 777 -R /var/www/html/
+
+RUN apt-get install php5-mysql
